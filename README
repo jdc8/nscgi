@@ -290,16 +290,36 @@ nscgi methods
 EXAMPLES
 ========
 
-Uploading a file HTML: <html> <form action="/cgi-bin/upload.cgi" method="POST"
-enctype="multipart/form-data"> Path: <input type="file" name="filedata"><br>
-Name: <input type="text" name="filedesc"><br> <input type="submit"> </form>
-</html> TCL: upload.cgi #!/usr/local/bin/tclsh package require nscgi # Create
-new nscgi object and initialise with environment variable and stdin set cgi
-[nscgi new init_cgi 1] $cgi parse set filedata [$cgi value filedata] set
-filedesc [$cgi value filedesc] puts "<html> File uploaded at <a
-href=\"/images/$filedesc\">$filedesc</a> </html>" set filename
-/www/images/$filedesc set fh [open $filename w] puts -nonewline $fh $filedata
-close $fh
+Uploading a file
+
+
+| HTML:
+| <html>
+| <form action="/cgi-bin/upload.cgi" method="POST" enctype="multipart/form-data">
+| Path: <input type="file" name="filedata"><br>
+| Name: <input type="text" name="filedesc"><br>
+| <input type="submit">
+| </form>
+| </html>
+
+| TCL: upload.cgi
+| #!/usr/local/bin/tclsh
+
+| package require nscgi
+
+| # Create new nscgi object and initialise with environment variable and stdin
+| set cgi [nscgi new init_cgi 1]
+| $cgi parse
+| set filedata [$cgi value filedata]
+| set filedesc [$cgi value filedesc]
+
+| puts "<html> File uploaded at <a href=\"/images/$filedesc\">$filedesc</a> </html>"
+
+| set filename /www/images/$filedesc
+
+| set fh [open $filename w]
+| puts -nonewline $fh $filedata
+| close $fh
 
 BUGS, IDEAS, FEEDBACK
 =====================
