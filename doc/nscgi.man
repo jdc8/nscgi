@@ -319,7 +319,7 @@ parameter, value list.  The second element is the form value.
 
 [list_end]
 
-[section EXAMPLES]
+[section Examples]
 
 Uploading a file
 [example {
@@ -354,7 +354,7 @@ close $fh
 
 [para]
 
-[section {BUGS, IDEAS, FEEDBACK}]
+[section {Bugs, ideas, feedback}]
 
 This document, and the package it describes, will undoubtedly contain
 bugs and other problems.
