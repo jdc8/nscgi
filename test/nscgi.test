@@ -8,7 +8,7 @@
 # Copyright (c) 1998-2000 by Ajuba Solutions
 # Copyright (c) 2013 by Jos Decoster
 
-lappend auto_path .
+lappend auto_path ..
 
 package require tcltest
 package require nscgi
