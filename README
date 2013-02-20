@@ -14,127 +14,149 @@ SYNOPSIS
 package require Tcl 8.6
 package require nscgi ?1.0.0?
 
-obj cookie cookie
-obj decode str
-obj empty name
-obj exists name
-obj encode string
-obj header ?type? args
-obj import cginame ?tclname?
-obj importAll args
-obj importFile cmd cginame ?filename?
-obj initCGI
-obj input ?fakeinput? ?fakecookie?
-obj multipart type query
-obj nvlist
-obj names
-obj parse
-obj parseMimeValue value
-obj query
-obj redirect url
-obj setCookie args
-obj setDefaultValue key defvalue
-obj setDefaultValueList key defvaluelist
-obj setValue key value
-obj setValueList key valuelist
-obj type
-obj urlStub ?url?
-obj value key ?default?
-obj valueList key ?default?
+*nscgi* new args
+nscgiObject configure args
+nscgiObject cookie cookie
+nscgiObject decode str
+nscgiObject empty name
+nscgiObject exists name
+nscgiObject encode string
+nscgiObject header ?type? args
+nscgiObject import cginame ?tclname?
+nscgiObject importAll args
+nscgiObject importFile cmd cginame ?filename?
+nscgiObject initCGI
+nscgiObject input ?fakeinput? ?fakecookie?
+nscgiObject multipart type query
+nscgiObject nvlist
+nscgiObject names
+nscgiObject parse
+nscgiObject parseMimeValue value
+nscgiObject query
+nscgiObject redirect url
+nscgiObject setCookie args
+nscgiObject setDefaultValue key defvalue
+nscgiObject setDefaultValueList key defvaluelist
+nscgiObject setValue key value
+nscgiObject setValueList key valuelist
+nscgiObject type
+nscgiObject urlStub ?url?
+nscgiObject value key ?default?
+nscgiObject valueList key ?default?
 
 DESCRIPTION
 ===========
 
-The *nscgi* package provides a oo::class class that manipulates CGI, SCGI and
-FCGI values. These are values that come from Web forms and are processed either
-by CGI scripts. Use the *nscgi* package to query these values, set and get
-cookies, and encode and decode www-url-encoded values.
+The *nscgi* package provides a _oo::class_ class that manipulates CGI, SCGI and
+FCGI values. These are values that come from Web forms and are processed by CGI
+scripts. Use the *nscgi* package to query these values, set and get cookies, and
+encode and decode www-url-encoded values.
 
-In the simplest case, a CGI script first creates a nscgi object, calls the parse
-method and then calls the value method to get different form values. If a CGI
-value is repeated, you should use the valueList method to get back the complete
-list of values.
+The *nscgi* package is based in *ncgi* package.
+
+In the simplest case, a CGI script first creates a *nscgi* object, calls the
+parse method and then calls the value method to get different form values. If a
+CGI value is repeated, you should use the valueList method to get back the
+complete list of values.
 
 An alternative to the parse method is the input method, which has semantics
 similar to Don Libes' cgi_input procedure. The input method restricts repeated
 CGI values to have names that end with "List". In this case, the value method
 will return the complete list of values, and the input method will raise errors
-if it find repeated form elements without the right name.
+if it finds repeated form elements without the right name.
 
 The reset method can be used in test suites and Web servers to initialize the
 source of the CGI values.
 
 The initCGI method can be used to initialize the source of the (plain) CGI
-values from the environment variables and from stdin.
+values from the environment variables and from _stdin_.
 
 The complete set of methods is described below.
 
-nscgi class
-===========
+nscgi class and methods
+=======================
 
-Arguments for the *nscgi* objects can be specified as key-value pairs when
-creating a new object. Known arguments are:
+    *nscgi* new args
 
-    headers
+        Arguments for the constructor can be specified as key-value pairs when
+        creating a new object. Known arguments are:
 
-        CGI headers.
+        headers
 
-    body
+            CGI headers.
 
-        CGI contents sent by upload.
+        body
 
-    init_cgi
+            CGI contents sent by upload.
 
-        Initialiase the object with headers from the environment variables and
-        body from stdin. Use this option when using plain CGI.
+        init_cgi
 
-nscgi methods
-=============
+            Initialiase the object with headers from the environment variables
+            and body from _stdin_. Use this option when using plain CGI.
 
-    obj cookie cookie
+    nscgiObject configure args
+
+        When one argument is specified, the argument value is returned. When
+        more than one argument is specified, they are interpreted as key-value
+        pairs. Known arguments are:
+
+        headers
+
+            CGI headers.
+
+        body
+
+            CGI contents sent by upload.
+
+        init_cgi
+
+            Initialiase the object with headers from the environment variables
+            and body from _stdin_. Use this option when using plain CGI.
+
+    nscgiObject cookie cookie
 
         Return a list of values for cookie, if any. It is possible that more
         than one cookie with the same name can be present, so this method
         returns a list.
 
-    obj decode str
+    nscgiObject decode str
 
         Decode strings in www-url-encoding, which represents special characters
         with a %xx sequence, where xx is the character code in hex.
 
-    obj empty name
+    nscgiObject empty name
 
         Returns 1 if the CGI variable name is not present or has the empty
         string as its value.
 
-    obj exists name
+    nscgiObject exists name
 
         The return value is a boolean. It returns *0* if the CGI variable name
         is not present, and *1* otherwise.
 
-    obj encode string
+    nscgiObject encode string
 
         Encode string into www-url-encoded format.
 
-    obj header ?type? args
+    nscgiObject header ?type? args
 
         Return the CGI header as a string. This emits a Content-Type: header and
         additional headers based on args, which is a list of header names and
         header values. The type defaults to "text/html".
 
-    obj import cginame ?tclname?
+    nscgiObject import cginame ?tclname?
 
         This creates a variable in the current scope with the value of the CGI
         variable cginame. The name of the variable is tclname, or cginame if
         tclname is empty (default).
 
-    obj importAll args
+    nscgiObject importAll args
 
         This imports several CGI variables as Tcl variables. If args is empty,
         then every CGI value is imported. Otherwise each CGI variable listed in
         args is imported.
 
-    obj importFile cmd cginame ?filename?
+    nscgiObject importFile cmd cginame ?filename?
 
         This provides information about an uploaded file from a form input field
         of type *file* with name cginame. cmd can be one of -server -client,
@@ -158,18 +180,18 @@ nscgi methods
             supplied) and returns the name of the file. The caller is
             responsible for deleting this file after use.
 
-    obj initCGI
+    nscgiObject initCGI
 
-        Initialize the nscgi object with environment variables and data read
-        from stdin for use with plain CGI.
+        Initialize the *nscgi* object with environment variables and data read
+        from _stdin_ for use with plain CGI.
 
-    obj input ?fakeinput? ?fakecookie?
+    nscgiObject input ?fakeinput? ?fakecookie?
 
         This reads and decodes the CGI values. It restricts repeated form values
         to have a trailing "List" in their name. The CGI values are obtained
         later with the value method.
 
-    obj multipart type query
+    nscgiObject multipart type query
 
         This method parses a multipart/form-data query. This is used by method
         nvlist and not normally called directly. It returns an alternating list
@@ -186,41 +208,41 @@ nscgi methods
         descriptive information is list of header names and values that describe
         the content.
 
-    obj nvlist
+    nscgiObject nvlist
 
         This returns all the query data as a name, value list. In the case of
-        multipart/form-data, the values are structured as described in
+        multipart/form-data, the values are structured as described in method
         multipart.
 
-    obj names
+    nscgiObject names
 
         This returns all names found in the query data, as a list.
 
-    obj parse
+    nscgiObject parse
 
         This reads and decodes the CGI values. The CGI values are obtained later
         with the value method. If a CGI value is repeated, then you should use
         mthod valueList to get the complete list of values.
 
-    obj parseMimeValue value
+    nscgiObject parseMimeValue value
 
         This decodes the Content-Type and other MIME headers that have the form
         of "primary value; param=val; p2=v2" It returns a list, where the first
         element is the primary value, and the second element is a list of
         parameter names and values.
 
-    obj query
+    nscgiObject query
 
         This returns the raw query data.
 
-    obj redirect url
+    nscgiObject redirect url
 
         Generate a response that causes a 302 redirect by the Web server. The
         url is the new URL that is the target of the redirect. The URL will be
         qualified with the current server and current directory, if necessary,
         to convert it into a full URL.
 
-    obj setCookie args
+    nscgiObject setCookie args
 
         Set a cookie value that will be returned as part of the reply. This must
         be done before header or redirect is called in order for the cookie to
@@ -236,56 +258,59 @@ nscgi methods
 
         -domain domain restriction
 
-    obj setDefaultValue key defvalue
+    nscgiObject setDefaultValue key defvalue
 
         Set a CGI value if it does not already exists. This affects future calls
-        to value (but not future calls to nvlist). If the CGI value already is
-        present, then this method has no side effects.
+        to method value (but not future calls to method nvlist). If the CGI
+        value is already present, then this method has no side effects.
 
-    obj setDefaultValueList key defvaluelist
+    nscgiObject setDefaultValueList key defvaluelist
 
-        Like setDefaultValue except that the value already has list structure to
-        represent multiple checkboxes or a multi-selection.
+        Like method setDefaultValue except that the value already has list
+        structure to represent multiple checkboxes or a multi-selection.
 
-    obj setValue key value
+    nscgiObject setValue key value
 
         Set a CGI value, overriding whatever was present in the CGI already.
-        This affects future calls to value (but not future calls to nvlist).
+        This affects future calls to method value (but not future calls to
+        method nvlist).
 
-    obj setValueList key valuelist
+    nscgiObject setValueList key valuelist
 
-        Like setValue except that the value already has list structure to
+        Like method setValue except that the value already has list structure to
         represent multiple checkboxes or a multi-selection.
 
-    obj type
+    nscgiObject type
 
         Returns the Content-Type of the current CGI values.
 
-    obj urlStub ?url?
+    nscgiObject urlStub ?url?
 
         Returns the current URL, but without the protocol, server, and port. If
         url is specified, then it defines the URL for the current session. That
-        value will be returned by future calls to urlStub
+        value will be returned by future calls to method urlStub
 
-    obj value key ?default?
+    nscgiObject value key ?default?
 
         Return the CGI value identified by key. If the CGI value is not present,
         then the default value is returned instead. This value defaults to the
         empty string.
 
-        If the form value key is repeated, then there are two cases: if parse
-        was called, then value only returns the first value associated with key.
-        If input was called, then value returns a Tcl list value and key must
-        end in "List" (e.g., "skuList"). In the case of multipart/form-data,
-        this method just returns the value of the form element. If you want the
-        meta-data associated with each form value, then use valueList.
+        If the form value key is repeated, then there are two cases: if method
+        parse was called, then method value only returns the first value
+        associated with key. If method input was called, then method value
+        returns a Tcl list value and key must end in "List" (e.g., "skuList").
+        In the case of multipart/form-data, this method just returns the value
+        of the form element. If you want the meta-data associated with each form
+        value, then use method valueList.
 
-    obj valueList key ?default?
+    nscgiObject valueList key ?default?
 
-        Like value, but this always returns a list of values (even if there is
-        only one value). In the case of multipart/form-data, this method returns
-        a list of two elements. The first element is meta-data in the form of a
-        parameter, value list. The second element is the form value.
+        Like method value, but this always returns a list of values (even if
+        there is only one value). In the case of multipart/form-data, this
+        method returns a list of two elements. The first element is meta-data in
+        the form of a parameter, value list. The second element is the form
+        value.
 
 EXAMPLES
 ========
