@@ -8,46 +8,54 @@
 [description]
 [para]
 
-The [package nscgi] package provides a [cmd oo::class] class that manipulates
+The [package nscgi] package provides a [term oo::class] class that manipulates
 CGI, SCGI and FCGI values. These are values that come from Web forms and are
-processed either by CGI scripts. Use the [package nscgi] package to query these
-values, set and get cookies, and encode and decode www-url-encoded values.
+processed by CGI scripts. Use the [package nscgi] package to query these values,
+set and get cookies, and encode and decode www-url-encoded values.
 
 [para]
 
-In the simplest case, a CGI script first creates a [cmd nscgi] object, calls the
-[cmd parse] method and then calls the [cmd value] method to get different form
-values.  If a CGI value is repeated, you should use the [cmd valueList] method
-to get back the complete list of values.
+The [package nscgi] package is based in [package ncgi] package.
 
 [para]
 
-An alternative to the [cmd parse] method is the [cmd input] method, which has
-semantics similar to Don Libes' [cmd cgi_input] procedure.
-
-The [cmd input] method restricts repeated CGI values to have names that end with
-"List".  In this case, the [cmd value] method will return the complete list of
-values, and the [cmd input] method will raise errors if it find repeated form
-elements without the right name.
+In the simplest case, a CGI script first creates a [class nscgi] object, calls
+the [method parse] method and then calls the [method value] method to get
+different form values.  If a CGI value is repeated, you should use the
+[method valueList] method to get back the complete list of values.
 
 [para]
 
-The [cmd reset] method can be used in test suites and Web servers to initialize
-the source of the CGI values.
+An alternative to the [method parse] method is the [method input] method, which
+has semantics similar to Don Libes' [cmd cgi_input] procedure.
+
+The [method input] method restricts repeated CGI values to have names that end
+with "List".  In this case, the [method value] method will return the complete
+list of values, and the [method input] method will raise errors if it finds
+repeated form elements without the right name.
 
 [para]
 
-The [cmd initCGI] method can be used to initialize the source of the (plain) CGI
-values from the environment variables and from [cmd stdin].
+The [method reset] method can be used in test suites and Web servers to
+initialize the source of the CGI values.
+
+[para]
+
+The [method initCGI] method can be used to initialize the source of the (plain)
+CGI values from the environment variables and from [term stdin].
 
 [para]
 
 The complete set of methods is described below.
 
-[section "nscgi class"]
+[section "nscgi class and methods"]
 
-Arguments for the [package nscgi] objects can be specified as key-value pairs
-when creating a new object. Known arguments are:
+[list_begin definitions]
+
+[call [class nscgi] [method new] [arg args]]
+
+Arguments for the constructor can be specified as key-value pairs when creating
+a new object. Known arguments are:
 
 [list_begin options]
 
@@ -56,67 +64,79 @@ when creating a new object. Known arguments are:
 [opt_def body] CGI contents sent by upload.
 
 [opt_def init_cgi] Initialiase the object with headers from the environment
-variables and body from [cmd stdin]. Use this option when using plain CGI.
+variables and body from [term stdin]. Use this option when using plain CGI.
 
 [list_end]
 
-[section "nscgi methods"]
+[call [arg nscgiObject] [method configure] [arg args]]
 
+When one argument is specified, the argument value is returned. When more than
+one argument is specified, they are interpreted as key-value pairs. Known
+arguments are:
 
-[list_begin definitions]
+[list_begin options]
 
-[call [arg obj] [cmd cookie] [arg cookie]]
+[opt_def headers] CGI headers.
+
+[opt_def body] CGI contents sent by upload.
+
+[opt_def init_cgi] Initialiase the object with headers from the environment
+variables and body from [term stdin]. Use this option when using plain CGI.
+
+[list_end]
+
+[call [arg nscgiObject] [method cookie] [arg cookie]]
 
 Return a list of values for [arg cookie], if any.  It is possible that
 more than one cookie with the same name can be present, so this
 method returns a list.
 
 
-[call [arg obj] [cmd decode] [arg str]]
+[call [arg nscgiObject] [method decode] [arg str]]
 
 Decode strings in www-url-encoding, which represents special characters with a
 %xx sequence, where xx is the character code in hex.
 
 
-[call [arg obj] [cmd empty] [arg name]]
+[call [arg nscgiObject] [method empty] [arg name]]
 
 Returns 1 if the CGI variable [arg name] is not present or has the empty string
 as its value.
 
 
-[call [arg obj] [cmd exists] [arg name]]
+[call [arg nscgiObject] [method exists] [arg name]]
 
 The return value is a boolean. It returns [const 0] if the CGI variable
 [arg name] is not present, and [const 1] otherwise.
 
 
-[call [arg obj] [cmd encode] [arg string]]
+[call [arg nscgiObject] [method encode] [arg string]]
 
 Encode [arg string] into www-url-encoded format.
 
 
-[call [arg obj] [cmd header] [opt [arg type]] [arg args]]
+[call [arg nscgiObject] [method header] [opt [arg type]] [arg args]]
 
 Return the CGI header as a string. This emits a Content-Type: header and
 additional headers based on [arg args], which is a list of header names and
 header values. The [arg type] defaults to "text/html".
 
 
-[call [arg obj] [cmd import] [arg cginame] [opt [arg tclname]]]
+[call [arg nscgiObject] [method import] [arg cginame] [opt [arg tclname]]]
 
 This creates a variable in the current scope with the value of the CGI variable
 [arg cginame].  The name of the variable is [arg tclname], or [arg cginame] if
 [arg tclname] is empty (default).
 
 
-[call [arg obj] [cmd importAll] [arg args]]
+[call [arg nscgiObject] [method importAll] [arg args]]
 
 This imports several CGI variables as Tcl variables.  If [arg args] is empty,
 then every CGI value is imported.  Otherwise each CGI variable listed in
 [arg args] is imported.
 
 
-[call [arg obj] [cmd importFile] [arg cmd] [arg cginame] [opt [arg filename]]]
+[call [arg nscgiObject] [method importFile] [arg cmd] [arg cginame] [opt [arg filename]]]
 
 This provides information about an uploaded file from a form input field of type
 [const file] with name [arg cginame].  [arg cmd] can be one of [option -server]
@@ -145,27 +165,27 @@ deleting this file after use.
 [list_end]
 
 
-[call [arg obj] [cmd initCGI]]
+[call [arg nscgiObject] [method initCGI]]
 
-Initialize the [cmd nscgi] object with environment variables and data read from
-[cmd stdin] for use with plain CGI.
+Initialize the [class nscgi] object with environment variables and data read from
+[term stdin] for use with plain CGI.
 
 
-[call [arg obj] [cmd input] [opt [arg fakeinput]] [opt [arg fakecookie]]]
+[call [arg nscgiObject] [method input] [opt [arg fakeinput]] [opt [arg fakecookie]]]
 
 This reads and decodes the CGI values. It restricts repeated form values to have
 a trailing "List" in their name. The CGI values are obtained later with the
-[cmd value] method.
+[method value] method.
 
 
-[call [arg obj] [cmd multipart] [arg {type query}]]
+[call [arg nscgiObject] [method multipart] [arg {type query}]]
 
 This method parses a multipart/form-data [arg query].  This is used by method
-[cmd nvlist] and not normally called directly.  It returns an alternating
+[method nvlist] and not normally called directly.  It returns an alternating
 list of names and structured values.  Each structure value is in turn a list of
 two elements.  The first element is meta-data from the multipart/form-data
-structure.  The second element is the form value.  If you use method 
-[cmd value] you just get the form value.  If you use method [cmd valueList]
+structure.  The second element is the form value.  If you use method
+[method value] you just get the form value.  If you use method [method valueList]
 you get the structured value with meta data and the value.
 
 [para]
@@ -178,26 +198,26 @@ second.  The descriptive information is list of header names and
 values that describe the content.
 
 
-[call [arg obj] [cmd nvlist]]
+[call [arg nscgiObject] [method nvlist]]
 
 This returns all the query data as a name, value list.  In the case of
-multipart/form-data, the values are structured as described in
-[cmd multipart].
+multipart/form-data, the values are structured as described in method
+[method multipart].
 
 
-[call [arg obj] [cmd names]]
+[call [arg nscgiObject] [method names]]
 
 This returns all names found in the query data, as a list.
 
 
-[call [arg obj] [cmd parse]]
+[call [arg nscgiObject] [method parse]]
 
 This reads and decodes the CGI values.  The CGI values are obtained later with
-the [cmd value] method.  If a CGI value is repeated, then you should
-use mthod [cmd valueList] to get the complete list of values.
+the [method value] method.  If a CGI value is repeated, then you should
+use mthod [method valueList] to get the complete list of values.
 
 
-[call [arg obj] [cmd parseMimeValue] [arg value]]
+[call [arg nscgiObject] [method parseMimeValue] [arg value]]
 
 This decodes the Content-Type and other MIME headers that have the
 form of "primary value; param=val; p2=v2" It returns a list, where the
@@ -205,12 +225,12 @@ first element is the primary value, and the second element is a list
 of parameter names and values.
 
 
-[call [arg obj] [cmd query]]
+[call [arg nscgiObject] [method query]]
 
 This returns the raw query data.
 
 
-[call [arg obj] [cmd redirect] [arg url]]
+[call [arg nscgiObject] [method redirect] [arg url]]
 
 Generate a response that causes a 302 redirect by the Web server.  The
 [arg url] is the new URL that is the target of the redirect.  The URL
@@ -218,10 +238,10 @@ will be qualified with the current server and current directory, if
 necessary, to convert it into a full URL.
 
 
-[call [arg obj] [cmd setCookie] [arg args]]
+[call [arg nscgiObject] [method setCookie] [arg args]]
 
 Set a cookie value that will be returned as part of the reply.  This
-must be done before [cmd header] or [cmd redirect] is
+must be done before [method header] or [method redirect] is
 called in order for the cookie to be returned properly.  The
 [arg args] are a set of flags and values:
 
@@ -235,46 +255,45 @@ called in order for the cookie to be returned properly.  The
 [list_end]
 
 
-[call [arg obj] [cmd setDefaultValue] [arg {key defvalue}]]
+[call [arg nscgiObject] [method setDefaultValue] [arg {key defvalue}]]
 
-Set a CGI value if it does not already exists.  This affects future
-calls to [cmd value] (but not future calls to
-[cmd nvlist]).  If the CGI value already is present, then this
-method has no side effects.
-
-
-[call [arg obj] [cmd setDefaultValueList] [arg {key defvaluelist}]]
-
-Like [cmd setDefaultValue] except that the value already has
-list structure to represent multiple checkboxes or a multi-selection.
+Set a CGI value if it does not already exists.  This affects future calls to
+method [method value] (but not future calls to method [method nvlist]).  If the
+CGI value is already present, then this method has no side effects.
 
 
-[call [arg obj] [cmd setValue] [arg {key value}]]
+[call [arg nscgiObject] [method setDefaultValueList] [arg {key defvaluelist}]]
 
-Set a CGI value, overriding whatever was present in the CGI
-already.  This affects future calls to [cmd value]
-(but not future calls to [cmd nvlist]).
-
-[call [arg obj] [cmd setValueList] [arg {key valuelist}]]
-
-Like [cmd setValue] except that the value already has list
+Like method [method setDefaultValue] except that the value already has list
 structure to represent multiple checkboxes or a multi-selection.
 
 
-[call [arg obj] [cmd type]]
+[call [arg nscgiObject] [method setValue] [arg {key value}]]
+
+Set a CGI value, overriding whatever was present in the CGI
+already.  This affects future calls to method [method value]
+(but not future calls to method [method nvlist]).
+
+[call [arg nscgiObject] [method setValueList] [arg {key valuelist}]]
+
+Like method [method setValue] except that the value already has list
+structure to represent multiple checkboxes or a multi-selection.
+
+
+[call [arg nscgiObject] [method type]]
 
 Returns the Content-Type of the current CGI values.
 
 
-[call [arg obj] [cmd urlStub] [opt [arg url]]]
+[call [arg nscgiObject] [method urlStub] [opt [arg url]]]
 
 Returns the current URL, but without the protocol, server, and port.
 If [arg url] is specified, then it defines the URL for the current
 session.  That value will be returned by future calls to
-[cmd urlStub]
+method [method urlStub]
 
 
-[call [arg obj] [cmd value] [arg key] [opt [arg default]]]
+[call [arg nscgiObject] [method value] [arg key] [opt [arg default]]]
 
 Return the CGI value identified by [arg key].  If the CGI value is not
 present, then the [arg default] value is returned instead. This value
@@ -282,23 +301,21 @@ defaults to the empty string.
 
 [para]
 
-If the form value [arg key] is repeated, then there are two cases: if
-[cmd parse] was called, then [cmd value] only returns
-the first value associated with [arg key].  If [cmd input] was
-called, then [cmd value] returns a Tcl list value and
-[arg key] must end in "List" (e.g., "skuList").  In the case of
-multipart/form-data, this method just returns the value of the form
-element.  If you want the meta-data associated with each form value,
-then use [cmd valueList].
+If the form value [arg key] is repeated, then there are two cases: if method
+[method parse] was called, then method [method value] only returns the first
+value associated with [arg key].  If method [method input] was called, then
+method [method value] returns a Tcl list value and [arg key] must end in "List"
+(e.g., "skuList").  In the case of multipart/form-data, this method just returns
+the value of the form element.  If you want the meta-data associated with each
+form value, then use method [method valueList].
 
 
-[call [arg obj] [cmd valueList] [arg key] [opt [arg default]]]
+[call [arg nscgiObject] [method valueList] [arg key] [opt [arg default]]]
 
-Like [cmd value], but this always returns a list of values
-(even if there is only one value).  In the case of
-multipart/form-data, this method returns a list of two elements.
-The first element is meta-data in the form of a parameter, value list.
-The second element is the form value.
+Like method [method value], but this always returns a list of values (even if
+there is only one value).  In the case of multipart/form-data, this method
+returns a list of two elements.  The first element is meta-data in the form of a
+parameter, value list.  The second element is the form value.
 
 [list_end]
 
