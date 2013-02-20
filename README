@@ -312,7 +312,7 @@ nscgi class and methods
         the form of a parameter, value list. The second element is the form
         value.
 
-EXAMPLES
+Examples
 ========
 
 Uploading a file
@@ -346,7 +346,7 @@ Uploading a file
 | puts -nonewline $fh $filedata
 | close $fh
 
-BUGS, IDEAS, FEEDBACK
+Bugs, ideas, feedback
 =====================
 
 This document, and the package it describes, will undoubtedly contain bugs and
